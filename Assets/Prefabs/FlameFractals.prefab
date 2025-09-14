@@ -46,49 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 1024
   height: 1024
-  iterations: 1000000
+  iterations: 5000000
   warmupIterations: 100000
-  transforms:
-  - a:
-      x: 0.5
-      y: 0
-    b:
-      x: 0
-      y: 0.5
-    c:
-      x: -0.5
-      y: 0
-    d:
-      x: 0
-      y: 1
-    color: {r: 0.8018868, g: 0.07186719, b: 0.07186719, a: 1}
-    probability: 0.33
-  - a:
-      x: 0.5
-      y: 0
-    b:
-      x: 0
-      y: 0.5
-    c:
-      x: 0.5
-      y: 0
-    d:
-      x: 0
-      y: 0.5
-    color: {r: 0.15574935, g: 0.6187402, b: 0.9433962, a: 1}
-    probability: 0.33
-  - a:
-      x: 0.5
-      y: 0.5
-    b:
-      x: -0.5
-      y: 0.5
-    c:
-      x: 0
-      y: -0.5
-    d:
-      x: 0
-      y: 0.5
-    color: {r: 0.9716981, g: 0.8417739, b: 0.2062567, a: 1}
-    probability: 0.33
+  config: {fileID: 11400000, guid: ce93af91c1b275d4b9b4a033c2294f28, type: 2}
   rawImage: {fileID: 0}

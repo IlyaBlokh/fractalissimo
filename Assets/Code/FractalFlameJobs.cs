@@ -13,7 +13,7 @@ namespace Code
         public int height = 512;
         public int iterations = 5_000_000;
         public int warmupIterations = 100_000;
-        public TransformData[] transforms;
+        public TransformConfig config;
 
         [Header("Output")] public RawImage rawImage;
 
@@ -92,7 +92,7 @@ namespace Code
             if (_pixelArray.IsCreated) _pixelArray.Dispose();
             if (_bounds.IsCreated) _bounds.Dispose();
 
-            _transformArray = new NativeArray<TransformData>(transforms, Allocator.TempJob);
+            _transformArray = new NativeArray<TransformData>(config.Transforms, Allocator.TempJob);
             _colorAccum = new NativeArray<float3>(width * height, Allocator.TempJob);
             _hitCount = new NativeArray<int>(width * height, Allocator.TempJob);
             _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
@@ -130,7 +130,7 @@ namespace Code
             int hash = 17;
             unchecked
             {
-                foreach (TransformData t in transforms)
+                foreach (TransformData t in config.Transforms)
                 {
                     // probability
                     hash = hash * w + t.probability.GetHashCode();
