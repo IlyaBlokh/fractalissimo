@@ -55,45 +55,43 @@ namespace Code
         {
             if (animateTransforms)
                 AnimateTransforms();
-            
+
             float currentHash = _currentTransforms.Hash();
-            if (!Mathf.Approximately(currentHash, _lastHash))
+
+            if (!Mathf.Approximately(currentHash, _lastHash) && !_jobRunning)
             {
-                Debug.Log($"New transforms hash: {currentHash}");
                 _lastHash = currentHash;
-                if (_jobRunning) 
-                    _jobHandle.Complete();
                 ScheduleJob(_currentTransforms);
+                _jobRunning = true;
             }
 
-            if (_jobRunning && _jobHandle.IsCompleted)
+            if (!_jobRunning || !_jobHandle.IsCompleted) return;
+            
+            _jobHandle.Complete();
+
+            for (int i = 0; i < _pixelArray.Length; i++)
             {
-                _jobHandle.Complete();
-
-                // Normalize color accumulators into pixel array
-                for (int i = 0; i < _pixelArray.Length; i++)
+                int hits = _hitCount[i];
+                if (hits > 0)
                 {
-                    int hits = _hitCount[i];
-                    if (hits > 0)
-                    {
-                        float3 col = _colorAccum[i] / hits; // average color
-                        col = math.sqrt(col); // gamma correction (optional glow look)
-                        _pixelArray[i] = new Color(col.x, col.y, col.z, 1f);
-                    }
-                    else
-                    {
-                        _pixelArray[i] = new Color32(0, 0, 0, 255);
-                    }
+                    float3 col = _colorAccum[i] / hits; // average color
+                    col = math.sqrt(col); // gamma correction (optional glow look)
+                    _pixelArray[i] = new Color(col.x, col.y, col.z, 1f);
                 }
-
-                _pixelArray.CopyTo(_pixels);
-                _texture.SetPixels32(_pixels);
-                _texture.Apply();
-
-                rawImage.texture = _texture;
-                _jobRunning = false;
+                else
+                {
+                    _pixelArray[i] = new Color32(0, 0, 0, 255);
+                }
             }
+
+            _pixelArray.CopyTo(_pixels);
+            _texture.SetPixels32(_pixels);
+            _texture.Apply();
+
+            rawImage.texture = _texture;
+            _jobRunning = false;
         }
+
 
         private void InitializeTexture()
         {
@@ -106,14 +104,12 @@ namespace Code
         {
             for (int i = 0; i < _targetTransforms.Length; i++)
             {
-                // Example: simple sine-based animation
                 _targetTransforms[i].a += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
                 _targetTransforms[i].b += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
                 _targetTransforms[i].c += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
                 _targetTransforms[i].d += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
             }
 
-            // Smooth interpolation
             for (int i = 0; i < _currentTransforms.Length; i++)
             {
                 _currentTransforms[i].a = math.lerp(_currentTransforms[i].a, _targetTransforms[i].a, Time.deltaTime * animationSpeed);
@@ -137,7 +133,6 @@ namespace Code
             _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
             _bounds = new NativeArray<float4>(1, Allocator.TempJob);
 
-            // First job: compute bounds
             var boundsJob = new BoundsJob
             {
                 iterations = warmupIterations,
@@ -145,7 +140,6 @@ namespace Code
                 bounds = _bounds
             };
 
-            // Second job: render using bounds
             var renderJob = new FractalJob
             {
                 width = width,
@@ -165,9 +159,7 @@ namespace Code
         
         private void OnDestroy()
         {
-            if (_jobRunning)
-                _jobHandle.Complete();
-
+            if (_jobRunning) _jobHandle.Complete();
             if (_transformArray.IsCreated) _transformArray.Dispose();
             if (_colorAccum.IsCreated) _colorAccum.Dispose();
             if (_hitCount.IsCreated) _hitCount.Dispose();
