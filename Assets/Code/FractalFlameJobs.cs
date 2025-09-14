@@ -8,9 +8,11 @@ namespace Code
 {
     public class FractalFlameJobs : MonoBehaviour
     {
-        [Header("Fractal Settings")] public int width = 512;
+        [Header("Fractal Settings")] 
+        public int width = 512;
         public int height = 512;
         public int iterations = 5_000_000;
+        public int warmupIterations = 100_000;
         public TransformData[] transforms;
 
         [Header("Output")] public RawImage rawImage;
@@ -22,6 +24,7 @@ namespace Code
         private NativeArray<float3> _colorAccum;
         private NativeArray<int> _hitCount;
         private NativeArray<Color32> _pixelArray;
+        private NativeArray<float4> _bounds;
 
         private JobHandle _jobHandle;
         private bool _jobRunning;
@@ -86,23 +89,37 @@ namespace Code
             if (_colorAccum.IsCreated) _colorAccum.Dispose();
             if (_hitCount.IsCreated) _hitCount.Dispose();
             if (_pixelArray.IsCreated) _pixelArray.Dispose();
+            if (_bounds.IsCreated) _bounds.Dispose();
 
             _transformArray = new NativeArray<TransformData>(transforms, Allocator.TempJob);
             _colorAccum = new NativeArray<float3>(width * height, Allocator.TempJob);
             _hitCount = new NativeArray<int>(width * height, Allocator.TempJob);
             _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
+            _bounds = new NativeArray<float4>(1, Allocator.TempJob);
 
-            var job = new FractalJob
+            // First job: compute bounds
+            var boundsJob = new BoundsJob
+            {
+                iterations = warmupIterations,
+                transforms = _transformArray,
+                bounds = _bounds
+            };
+
+            // Second job: render using bounds
+            var renderJob = new FractalJob
             {
                 width = width,
                 height = height,
                 iterations = iterations,
                 transforms = _transformArray,
                 colorAccum = _colorAccum,
-                hitCount = _hitCount
+                hitCount = _hitCount,
+                bounds = _bounds
             };
 
-            _jobHandle = job.Schedule();
+            _jobHandle = boundsJob.Schedule();
+            _jobHandle = renderJob.Schedule(_jobHandle);
+
             _jobRunning = true;
         }
 

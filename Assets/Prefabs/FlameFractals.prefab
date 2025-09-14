@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 1024
   height: 1024
-  iterations: 100000
+  iterations: 1000000
   transforms:
   - a:
       x: 0.5
@@ -89,19 +89,5 @@ MonoBehaviour:
       x: 0
       y: 0.5
     color: {r: 0.9716981, g: 0.8417739, b: 0.2062567, a: 1}
-    probability: 0.25
-  - a:
-      x: -0.5
-      y: -0.75
-    b:
-      x: 0
-      y: 0.5
-    c:
-      x: 0.25
-      y: 0.25
-    d:
-      x: 0
-      y: -0.25
-    color: {r: 0.114498034, g: 0.7830189, b: 0.13550583, a: 1}
     probability: 0.25
   rawImage: {fileID: 0}
