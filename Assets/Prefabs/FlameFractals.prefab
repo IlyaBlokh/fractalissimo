@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8812526624311029848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4381998817855126292}
+  - component: {fileID: 6424594933816982912}
+  m_Layer: 0
+  m_Name: FlameFractals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4381998817855126292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812526624311029848}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6424594933816982912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812526624311029848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84f24f4849a0c5245b71405ae3e6e1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 1024
+  height: 1024
+  iterations: 100000
+  transforms:
+  - a:
+      x: 0.5
+      y: 0
+    b:
+      x: 0
+      y: 0.5
+    c:
+      x: -0.5
+      y: 0
+    d:
+      x: 0
+      y: 0.5
+    color: {r: 0.8018868, g: 0.07186719, b: 0.07186719, a: 1}
+    probability: 0.25
+  - a:
+      x: 0.5
+      y: 0
+    b:
+      x: 0
+      y: 0.5
+    c:
+      x: 0.5
+      y: 0
+    d:
+      x: 0
+      y: 0.5
+    color: {r: 0.15574935, g: 0.6187402, b: 0.9433962, a: 1}
+    probability: 0.25
+  - a:
+      x: 0.5
+      y: 0.5
+    b:
+      x: -0.5
+      y: 0.5
+    c:
+      x: 0
+      y: -0.5
+    d:
+      x: 0
+      y: 0.5
+    color: {r: 0.9716981, g: 0.8417739, b: 0.2062567, a: 1}
+    probability: 0.25
+  - a:
+      x: -0.5
+      y: -0.75
+    b:
+      x: 0
+      y: 0.5
+    c:
+      x: 0.25
+      y: 0.25
+    d:
+      x: 0
+      y: -0.25
+    color: {r: 0.114498034, g: 0.7830189, b: 0.13550583, a: 1}
+    probability: 0.25
+  rawImage: {fileID: 0}
