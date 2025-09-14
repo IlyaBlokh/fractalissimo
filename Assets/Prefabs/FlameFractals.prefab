@@ -47,6 +47,7 @@ MonoBehaviour:
   width: 1024
   height: 1024
   iterations: 1000000
+  warmupIterations: 100000
   transforms:
   - a:
       x: 0.5
@@ -59,9 +60,9 @@ MonoBehaviour:
       y: 0
     d:
       x: 0
-      y: 0.5
+      y: 1
     color: {r: 0.8018868, g: 0.07186719, b: 0.07186719, a: 1}
-    probability: 0.25
+    probability: 0.33
   - a:
       x: 0.5
       y: 0
@@ -75,7 +76,7 @@ MonoBehaviour:
       x: 0
       y: 0.5
     color: {r: 0.15574935, g: 0.6187402, b: 0.9433962, a: 1}
-    probability: 0.25
+    probability: 0.33
   - a:
       x: 0.5
       y: 0.5
@@ -89,5 +90,5 @@ MonoBehaviour:
       x: 0
       y: 0.5
     color: {r: 0.9716981, g: 0.8417739, b: 0.2062567, a: 1}
-    probability: 0.25
+    probability: 0.33
   rawImage: {fileID: 0}

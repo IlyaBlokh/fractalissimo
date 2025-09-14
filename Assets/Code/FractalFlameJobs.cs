@@ -39,9 +39,10 @@ namespace Code
         private void Update()
         {
             // Detect parameter changes by hashing transforms
-            float currentHash = GetTransformsHash();
+            int currentHash = GetTransformsHash();
             if (!Mathf.Approximately(currentHash, _lastHash))
             {
+                Debug.Log($"New transforms hash: {currentHash}");
                 _lastHash = currentHash;
                 if (_jobRunning) _jobHandle.Complete();
                 ScheduleJob();
@@ -123,18 +124,39 @@ namespace Code
             _jobRunning = true;
         }
 
-        private float GetTransformsHash()
+        private int GetTransformsHash()
         {
-            float hash = 17;
-            foreach (TransformData t in transforms)
+            const int w = 31;
+            int hash = 17;
+            unchecked
             {
-                hash = hash * 31 + t.probability * 1000f;
-                hash = hash * 31 + t.a.x + t.a.y + t.b.x + t.b.y;
-                hash = hash * 31 + t.c.x + t.c.y + t.d.x + t.d.y;
-            }
+                foreach (TransformData t in transforms)
+                {
+                    // probability
+                    hash = hash * w + t.probability.GetHashCode();
 
-            return hash;
+                    // matrix components
+                    hash = hash * w + t.a.x.GetHashCode();
+                    hash = hash * w + t.a.y.GetHashCode();
+                    hash = hash * w + t.b.x.GetHashCode();
+                    hash = hash * w + t.b.y.GetHashCode();
+
+                    hash = hash * w + t.c.x.GetHashCode();
+                    hash = hash * w + t.c.y.GetHashCode();
+                    hash = hash * w + t.d.x.GetHashCode();
+                    hash = hash * w + t.d.y.GetHashCode();
+
+                    // color
+                    hash = hash * w + t.color.r.GetHashCode();
+                    hash = hash * w + t.color.g.GetHashCode();
+                    hash = hash * w + t.color.b.GetHashCode();
+                    hash = hash * w + t.color.a.GetHashCode();
+                }
+
+                return hash;
+            }
         }
+
 
         private void OnDestroy()
         {

@@ -45,7 +45,7 @@ namespace Code
                     }
                 }
 
-                var t = transforms[chosen];
+                TransformData t = transforms[chosen];
                 p = new float2(
                     t.a.x * p.x + t.b.x * p.y + t.c.x,
                     t.a.y * p.x + t.b.y * p.y + t.d.y
