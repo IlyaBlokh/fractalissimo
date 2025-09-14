@@ -16,9 +16,15 @@ namespace Code
         public TransformConfig config;
 
         [Header("Output")] public RawImage rawImage;
+        
+        [Header("Animation Settings")]
+        public bool animateTransforms = true;
+        public float animationSpeed = 0.5f;
 
         private Texture2D _texture;
         private Color32[] _pixels;
+        private TransformData[] _currentTransforms;
+        private TransformData[] _targetTransforms;
 
         private NativeArray<TransformData> _transformArray;
         private NativeArray<float3> _colorAccum;
@@ -32,20 +38,32 @@ namespace Code
 
         private void Start()
         {
+            int n = config.Transforms.Length;
+            _currentTransforms = new TransformData[n];
+            _targetTransforms = new TransformData[n];
+            for (int i = 0; i < n; i++)
+            {
+                _currentTransforms[i] = config.Transforms[i];
+                _targetTransforms[i] = config.Transforms[i];
+            }
+            
             InitializeTexture();
-            ScheduleJob();
+            ScheduleJob(_currentTransforms);
         }
 
         private void Update()
         {
-            // Detect parameter changes by hashing transforms
-            int currentHash = GetTransformsHash();
+            if (animateTransforms)
+                AnimateTransforms();
+            
+            float currentHash = _currentTransforms.Hash();
             if (!Mathf.Approximately(currentHash, _lastHash))
             {
                 Debug.Log($"New transforms hash: {currentHash}");
                 _lastHash = currentHash;
-                if (_jobRunning) _jobHandle.Complete();
-                ScheduleJob();
+                if (_jobRunning) 
+                    _jobHandle.Complete();
+                ScheduleJob(_currentTransforms);
             }
 
             if (_jobRunning && _jobHandle.IsCompleted)
@@ -83,8 +101,29 @@ namespace Code
             _pixels = new Color32[width * height];
             rawImage.texture = _texture;
         }
+        
+        private void AnimateTransforms()
+        {
+            for (int i = 0; i < _targetTransforms.Length; i++)
+            {
+                // Example: simple sine-based animation
+                _targetTransforms[i].a += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
+                _targetTransforms[i].b += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
+                _targetTransforms[i].c += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
+                _targetTransforms[i].d += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
+            }
 
-        private void ScheduleJob()
+            // Smooth interpolation
+            for (int i = 0; i < _currentTransforms.Length; i++)
+            {
+                _currentTransforms[i].a = math.lerp(_currentTransforms[i].a, _targetTransforms[i].a, Time.deltaTime * animationSpeed);
+                _currentTransforms[i].b = math.lerp(_currentTransforms[i].b, _targetTransforms[i].b, Time.deltaTime * animationSpeed);
+                _currentTransforms[i].c = math.lerp(_currentTransforms[i].c, _targetTransforms[i].c, Time.deltaTime * animationSpeed);
+                _currentTransforms[i].d = math.lerp(_currentTransforms[i].d, _targetTransforms[i].d, Time.deltaTime * animationSpeed);
+            }
+        }
+
+        private void ScheduleJob(TransformData[] transforms)
         {
             if (_transformArray.IsCreated) _transformArray.Dispose();
             if (_colorAccum.IsCreated) _colorAccum.Dispose();
@@ -92,7 +131,7 @@ namespace Code
             if (_pixelArray.IsCreated) _pixelArray.Dispose();
             if (_bounds.IsCreated) _bounds.Dispose();
 
-            _transformArray = new NativeArray<TransformData>(config.Transforms, Allocator.TempJob);
+            _transformArray = new NativeArray<TransformData>(transforms, Allocator.TempJob);
             _colorAccum = new NativeArray<float3>(width * height, Allocator.TempJob);
             _hitCount = new NativeArray<int>(width * height, Allocator.TempJob);
             _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
@@ -123,41 +162,7 @@ namespace Code
 
             _jobRunning = true;
         }
-
-        private int GetTransformsHash()
-        {
-            const int w = 31;
-            int hash = 17;
-            unchecked
-            {
-                foreach (TransformData t in config.Transforms)
-                {
-                    // probability
-                    hash = hash * w + t.probability.GetHashCode();
-
-                    // matrix components
-                    hash = hash * w + t.a.x.GetHashCode();
-                    hash = hash * w + t.a.y.GetHashCode();
-                    hash = hash * w + t.b.x.GetHashCode();
-                    hash = hash * w + t.b.y.GetHashCode();
-
-                    hash = hash * w + t.c.x.GetHashCode();
-                    hash = hash * w + t.c.y.GetHashCode();
-                    hash = hash * w + t.d.x.GetHashCode();
-                    hash = hash * w + t.d.y.GetHashCode();
-
-                    // color
-                    hash = hash * w + t.color.r.GetHashCode();
-                    hash = hash * w + t.color.g.GetHashCode();
-                    hash = hash * w + t.color.b.GetHashCode();
-                    hash = hash * w + t.color.a.GetHashCode();
-                }
-
-                return hash;
-            }
-        }
-
-
+        
         private void OnDestroy()
         {
             if (_jobRunning)
