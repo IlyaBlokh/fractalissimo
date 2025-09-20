@@ -50,7 +50,8 @@ namespace Code
             }
             
             InitializeTexture();
-            ScheduleJob(_currentTransforms);
+            AllocateMemory();
+            ScheduleJobs();
         }
 
         private void Update()
@@ -63,7 +64,7 @@ namespace Code
             if (!Mathf.Approximately(currentHash, _lastHash) && !_jobRunning)
             {
                 _lastHash = currentHash;
-                ScheduleJob(_currentTransforms);
+                ScheduleJobs();
                 _jobRunning = true;
             }
 
@@ -121,20 +122,10 @@ namespace Code
             }
         }
 
-        private void ScheduleJob(TransformData[] transforms)
+        private void ScheduleJobs()
         {
-            if (_transformArray.IsCreated) _transformArray.Dispose();
-            if (_colorAccum.IsCreated) _colorAccum.Dispose();
-            if (_hitCount.IsCreated) _hitCount.Dispose();
-            if (_pixelArray.IsCreated) _pixelArray.Dispose();
-            if (_bounds.IsCreated) _bounds.Dispose();
-
-            _transformArray = new NativeArray<TransformData>(transforms, Allocator.TempJob);
-            _colorAccum = new NativeArray<float3>(width * height, Allocator.TempJob);
-            _hitCount = new NativeArray<int>(width * height, Allocator.TempJob);
-            _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
-            _bounds = new NativeArray<float4>(1, Allocator.TempJob);
-
+            AllocateMemory();
+            
             var boundsJob = new BoundsJob
             {
                 iterations = warmupIterations,
@@ -158,14 +149,31 @@ namespace Code
 
             _jobRunning = true;
         }
-        
-        private void OnDestroy()
+
+        private void AllocateMemory()
         {
-            if (_jobRunning) _jobHandle.Complete();
+            DisposeMemory();
+
+            _transformArray = new NativeArray<TransformData>(_currentTransforms, Allocator.TempJob);
+            _colorAccum = new NativeArray<float3>(width * height, Allocator.TempJob);
+            _hitCount = new NativeArray<int>(width * height, Allocator.TempJob);
+            _pixelArray = new NativeArray<Color32>(width * height, Allocator.TempJob);
+            _bounds = new NativeArray<float4>(1, Allocator.TempJob);
+        }
+
+        private void DisposeMemory()
+        {
             if (_transformArray.IsCreated) _transformArray.Dispose();
             if (_colorAccum.IsCreated) _colorAccum.Dispose();
             if (_hitCount.IsCreated) _hitCount.Dispose();
             if (_pixelArray.IsCreated) _pixelArray.Dispose();
+            if (_bounds.IsCreated) _bounds.Dispose();
+        }
+
+        private void OnDestroy()
+        {
+            if (_jobRunning) _jobHandle.Complete();
+            DisposeMemory();
         }
     }
 }
