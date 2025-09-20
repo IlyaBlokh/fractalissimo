@@ -40,13 +40,13 @@ namespace Code
 
         private void Start()
         {
-            int n = config.Transforms.Length;
+            int n = Fractals.BarnsleyFern.Length;
             _currentTransforms = new TransformData[n];
             _targetTransforms = new TransformData[n];
             for (int i = 0; i < n; i++)
             {
-                _currentTransforms[i] = config.Transforms[i];
-                _targetTransforms[i] = config.Transforms[i];
+                _currentTransforms[i] = Fractals.BarnsleyFern[i];
+                _targetTransforms[i] = Fractals.BarnsleyFern[i];
             }
             
             InitializeTexture();
