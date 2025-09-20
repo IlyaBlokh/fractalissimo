@@ -51,7 +51,7 @@ namespace Code
                     t.a.x * p.x + t.b.x * p.y + t.c.x,
                     t.a.y * p.x + t.b.y * p.y + t.d.y
                 );
-
+                
                 // Normalize coordinates to texture
                 float nx = (p.x - minX) / (maxX - minX);
                 float ny = (p.y - minY) / (maxY - minY);

@@ -14,7 +14,7 @@ namespace Code
         public int height = 512;
         public int iterations = 5_000_000;
         public int warmupIterations = 100_000;
-        public TransformConfig config;
+        public Fractal fractal;
 
         [Header("Output")] 
         public RawImage rawImage;
@@ -40,13 +40,13 @@ namespace Code
 
         private void Start()
         {
-            int n = Fractals.BarnsleyFern.Length;
+            int n = fractal.Data().Length;
             _currentTransforms = new TransformData[n];
             _targetTransforms = new TransformData[n];
             for (int i = 0; i < n; i++)
             {
-                _currentTransforms[i] = Fractals.BarnsleyFern[i];
-                _targetTransforms[i] = Fractals.BarnsleyFern[i];
+                _currentTransforms[i] = fractal.Data()[i];
+                _targetTransforms[i] = fractal.Data()[i];
             }
             
             InitializeTexture();
