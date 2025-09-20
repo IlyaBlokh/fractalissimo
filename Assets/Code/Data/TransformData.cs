@@ -1,7 +1,7 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 
-namespace Code
+namespace Code.Data
 {
   [System.Serializable]
   public struct TransformData

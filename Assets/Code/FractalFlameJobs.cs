@@ -1,3 +1,4 @@
+using Code.Data;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -15,7 +16,8 @@ namespace Code
         public int warmupIterations = 100_000;
         public TransformConfig config;
 
-        [Header("Output")] public RawImage rawImage;
+        [Header("Output")] 
+        public RawImage rawImage;
         
         [Header("Animation Settings")]
         public bool animateTransforms = true;

@@ -1,4 +1,6 @@
-﻿namespace Code
+﻿using Code.Data;
+
+namespace Code
 {
   public static class TransformDataExtensions
   {
