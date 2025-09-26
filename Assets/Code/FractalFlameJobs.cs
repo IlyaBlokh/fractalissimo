@@ -9,6 +9,7 @@ namespace Code
 {
     public class FractalFlameJobs : MonoBehaviour
     {
+
         [Header("Fractal Settings")] 
         public int width = 512;
         public int height = 512;
@@ -22,6 +23,7 @@ namespace Code
         [Header("Animation Settings")]
         public bool animateTransforms = true;
         public float animationSpeed = 0.5f;
+        public float animationOffset = 0.0005f;
 
         private Texture2D _texture;
         private Color32[] _pixels;
@@ -107,10 +109,10 @@ namespace Code
         {
             for (int i = 0; i < _targetTransforms.Length; i++)
             {
-                _targetTransforms[i].a += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
-                _targetTransforms[i].b += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
-                _targetTransforms[i].c += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * 0.001f;
-                _targetTransforms[i].d += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * 0.001f;
+                _targetTransforms[i].a += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * animationOffset;
+                _targetTransforms[i].b += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * animationOffset;
+                _targetTransforms[i].c += new float2(Mathf.Sin(Time.time), Mathf.Cos(Time.time)) * animationOffset;
+                _targetTransforms[i].d += new float2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) * animationOffset;
             }
 
             for (int i = 0; i < _currentTransforms.Length; i++)

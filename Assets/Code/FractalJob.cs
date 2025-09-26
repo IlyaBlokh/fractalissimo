@@ -13,10 +13,10 @@ namespace Code
         public int height;
         public int iterations;
 
+        [ReadOnly] public NativeArray<float4> bounds;
         [ReadOnly] public NativeArray<TransformData> transforms;
         public NativeArray<float3> colorAccum;
         public NativeArray<int> hitCount;
-        [ReadOnly] public NativeArray<float4> bounds;
 
         public void Execute()
         {

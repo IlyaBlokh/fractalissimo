@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f24f4849a0c5245b71405ae3e6e1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 512
-  height: 512
-  iterations: 2500000
-  warmupIterations: 100000
-  config: {fileID: 11400000, guid: 53deb6df9c05bca4ca63ef7f15ba2aab, type: 2}
+  width: 1024
+  height: 1024
+  iterations: 250000
+  warmupIterations: 50000
+  fractal: 1
   rawImage: {fileID: 0}
   animateTransforms: 1
   animationSpeed: 0.5
+  animationOffset: 0.0025

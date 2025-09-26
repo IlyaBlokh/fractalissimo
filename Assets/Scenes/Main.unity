@@ -729,15 +729,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: width
-      value: 1024
+      value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
-      propertyPath: config
-      value: 
-      objectReference: {fileID: 11400000, guid: 53deb6df9c05bca4ca63ef7f15ba2aab, type: 2}
-    - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: height
-      value: 1024
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
+      propertyPath: fractal
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: rawImage
@@ -745,11 +745,15 @@ PrefabInstance:
       objectReference: {fileID: 1481183713}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: iterations
-      value: 1000000
+      value: 500000
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: animationSpeed
-      value: 2.5
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
+      propertyPath: animationOffset
+      value: 0.0001
       objectReference: {fileID: 0}
     - target: {fileID: 8812526624311029848, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: m_Name

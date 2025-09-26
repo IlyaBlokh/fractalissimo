@@ -61,7 +61,7 @@ namespace Code.Data
           c = new float2(-0.5f, 0f),
           d = new float2(0f, 1f),
           probability = 0.33f,
-          color = Color.red
+          color = Color.yellow
         },
         new TransformData
         {
@@ -70,7 +70,7 @@ namespace Code.Data
           c = new float2(0.5f, 0f),
           d = new float2(0f, 0.5f),
           probability = 0.33f,
-          color = Color.green
+          color = Color.softRed
         },
         new TransformData
         {
@@ -79,7 +79,7 @@ namespace Code.Data
           c = new float2(0f, -0.5f),
           d = new float2(0f, 0.5f),
           probability = 0.34f,
-          color = Color.blue
+          color = Color.cyan
         }
       };
       SierpinskiTriangle2 = new[]
