@@ -737,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: fractal
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: rawImage

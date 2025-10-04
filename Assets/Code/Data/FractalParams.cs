@@ -70,7 +70,7 @@ namespace Code.Data
           c = new float2(0.5f, 0f),
           d = new float2(0f, 0.5f),
           probability = 0.33f,
-          color = Color.softRed
+          color = new Color(1f, 0.3f, 0.2f)
         },
         new TransformData
         {
