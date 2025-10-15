@@ -32,7 +32,6 @@ namespace Code
 
             for (int i = 0; i < iterations; i++)
             {
-                // Weighted random transform
                 float r = rng.NextFloat(0f, totalProb);
                 float accum = 0f;
                 int chosen = 0;

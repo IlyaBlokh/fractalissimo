@@ -9,7 +9,6 @@ namespace Code
 {
     public class FractalFlameJobs : MonoBehaviour
     {
-
         [Header("Fractal Settings")] 
         public int width = 512;
         public int height = 512;
@@ -38,7 +37,6 @@ namespace Code
 
         private JobHandle _jobHandle;
         private bool _jobRunning;
-        private float _lastHash;
 
         private void Start()
         {
@@ -53,34 +51,32 @@ namespace Code
             
             InitializeTexture();
             AllocateMemory();
-            ScheduleJobs();
         }
 
         private void Update()
         {
+            if (_jobRunning)
+            {
+                _jobHandle.Complete();
+                UpdateTexture();
+                _jobRunning = false;
+            }
+
             if (animateTransforms)
                 AnimateTransforms();
 
-            float currentHash = _currentTransforms.Hash();
+            ScheduleJobs();
+        }
 
-            if (!Mathf.Approximately(currentHash, _lastHash) && !_jobRunning)
-            {
-                _lastHash = currentHash;
-                ScheduleJobs();
-                _jobRunning = true;
-            }
-
-            if (!_jobRunning || !_jobHandle.IsCompleted) return;
-            
-            _jobHandle.Complete();
-
+        private void UpdateTexture()
+        {
             for (int i = 0; i < _pixelArray.Length; i++)
             {
                 int hits = _hitCount[i];
                 if (hits > 0)
                 {
-                    float3 col = _colorAccum[i] / hits; // average color
-                    col = math.sqrt(col); // gamma correction (optional glow look)
+                    float3 col = _colorAccum[i] / hits; 
+                    col = math.sqrt(col);
                     _pixelArray[i] = new Color(col.x, col.y, col.z, 1f);
                 }
                 else
@@ -92,11 +88,8 @@ namespace Code
             _pixelArray.CopyTo(_pixels);
             _texture.SetPixels32(_pixels);
             _texture.Apply();
-
             rawImage.texture = _texture;
-            _jobRunning = false;
         }
-
 
         private void InitializeTexture()
         {

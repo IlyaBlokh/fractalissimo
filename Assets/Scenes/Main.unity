@@ -749,11 +749,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: animationSpeed
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: animationOffset
-      value: 0.0001
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424594933816982912, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
+      propertyPath: warmupIterations
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 8812526624311029848, guid: c1c8a1c0d54e6194ea535214bd1b770b, type: 3}
       propertyPath: m_Name
